@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Manager {
+  id                 Int                   @id @default(autoincrement())
+  username           String                @unique
+  passwordHash       String
+  createdAt          DateTime              @default(now())
+
+  handledPayments    TenantTransaction[]   @relation("HandledPayments")
+  sentTransfers      ManagerTransaction[]  @relation("Sent")
+  receivedTransfers  ManagerTransaction[]  @relation("Received")
+}
+
+model Tenant {
+  id             Int                 @id @default(autoincrement())
+  name           String              @unique
+  createdAt      DateTime            @default(now())
+
+  assignments    RoomAssignment[]
+  payments       TenantTransaction[]
+}
+
+model Room {
+  id             Int               @id @default(autoincrement())
+  name           String            @unique
+  createdAt      DateTime          @default(now())
+
+  assignments    RoomAssignment[]
+  payments       TenantTransaction[]
+}
+
+model RoomAssignment {
+  id         Int      @id @default(autoincrement())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId   Int
+  room       Room     @relation(fields: [roomId], references: [id])
+  roomId     Int
+  startDate  DateTime
+  endDate    DateTime?
+
+  @@unique([roomId, startDate])
+}
+
+model TenantTransaction {
+  id            Int      @id @default(autoincrement())
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId      Int
+  room          Room     @relation(fields: [roomId], references: [id])
+  roomId        Int
+  manager       Manager  @relation("HandledPayments", fields: [managerId], references: [id])
+  managerId     Int
+  amount        Decimal
+  startMonth    DateTime
+  endMonth      DateTime
+  paymentDate   DateTime @default(now())
+  notes         String?
+}
+
+model ManagerTransaction {
+  id           Int      @id @default(autoincrement())
+  sender       Manager  @relation("Sent", fields: [senderId], references: [id])
+  senderId     Int
+  receiver     Manager  @relation("Received", fields: [receiverId], references: [id])
+  receiverId   Int
+  amount       Decimal
+  currency     String   @default("EUR")
+  paymentDate  DateTime @default(now())
+  notes        String?
+}
