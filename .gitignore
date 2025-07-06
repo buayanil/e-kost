@@ -1,0 +1,19 @@
+# Node
+node_modules/
+dist/
+.env
+
+# Vite
+frontend/.vite
+
+# Prisma
+backend/prisma/dev.db
+backend/prisma/migrations/
+
+# Logs
+*.log
+npm-debug.log*
+
+# System
+.DS_Store
+Thumbs.db
