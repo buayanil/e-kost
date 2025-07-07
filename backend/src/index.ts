@@ -1,24 +1,27 @@
+// Keep this part:
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import authRoutes from './routes/auth';
 
-// Load environment variables from .env file
 dotenv.config();
 
-// Create the Express app
 const app = express();
+app.use(cors());
+app.use(express.json());
 
-// Middleware
-app.use(cors());              // Allows frontend to access backend
-app.use(express.json());      // Parses JSON in request bodies
+app.use('/api/auth', authRoutes);
 
-// Test route
 app.get('/', (req, res) => {
     res.send('✅ e-kost backend is running');
 });
 
-// Start the server
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server listening on http://localhost:${PORT}`);
-});
+// Only start the server if not in test
+if (process.env.NODE_ENV !== 'test') {
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Server listening on http://localhost:${PORT}`);
+    });
+}
+
+export default app; // 👈 Export the app for testing
