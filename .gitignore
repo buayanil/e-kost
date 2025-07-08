@@ -9,6 +9,7 @@ frontend/.vite
 # Prisma
 backend/prisma/dev.db
 backend/prisma/migrations/
+*.db
 
 # Logs
 *.log

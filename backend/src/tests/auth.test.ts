@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
-import app from '../index'; // Update if your Express app is in a different file
+import { describe, it, expect, beforeEach } from 'vitest';
+import app from '../app';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from "bcrypt";
 
