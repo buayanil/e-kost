@@ -2,6 +2,7 @@ import request from 'supertest'
 import { describe, it, beforeAll, beforeEach, expect } from 'vitest'
 import { prisma } from '../prismaClient'
 import app from '../app'
+import {execSync} from "child_process";
 
 let token: string
 
@@ -11,6 +12,7 @@ beforeAll(async () => {
         .send({ username: 'admin', password: 'admin123' })
     token = res.body.token
     console.log('Login response:', res.status, res.body);
+    execSync("npm run reset-db", { stdio: "inherit" });
 })
 
 beforeEach(async () => {

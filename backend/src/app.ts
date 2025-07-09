@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import tenantRoutes from './routes/tenant';
 import roomRoutes from "./routes/room";
+import roomAssignmentRoutes from "./routes/roomAssignment";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/tenants', tenantRoutes);
 app.use("/rooms", roomRoutes);
+app.use("/assignments", roomAssignmentRoutes);
 
 app.get('/', (req, res) => {
     res.send('✅ e-kost backend is running');
