@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { SignJWT } from 'jose';
 import dotenv from 'dotenv';
-import {authMiddleware} from "../middleware/authMiddleware";
+import {authMiddleware} from "../middleware/auth.middleware";
 
 dotenv.config();
 

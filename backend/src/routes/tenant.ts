@@ -6,8 +6,8 @@ import {
     createTenant,
     updateTenant,
     deleteTenant,
-} from '../controllers/tenantController'
-import { authMiddleware } from '../middleware/authMiddleware'
+} from '../controllers/tenant.controller'
+import { authMiddleware } from '../middleware/auth.middleware'
 
 const router = Router()
 

@@ -3,7 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
-import tenantRouter from './routes/tenant'
+import tenantRoutes from './routes/tenant';
+import roomRoutes from "./routes/room";
 
 dotenv.config();
 
@@ -12,7 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
-app.use('/tenants', tenantRouter)
+app.use('/tenants', tenantRoutes);
+app.use("/rooms", roomRoutes);
 
 app.get('/', (req, res) => {
     res.send('✅ e-kost backend is running');
