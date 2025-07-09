@@ -6,6 +6,7 @@ import authRoutes from './routes/auth';
 import tenantRoutes from './routes/tenant';
 import roomRoutes from "./routes/room";
 import roomAssignmentRoutes from "./routes/roomAssignment";
+import tenantTransactionRoutes from "./routes/tenantTransaction";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/tenants', tenantRoutes);
 app.use("/rooms", roomRoutes);
 app.use("/assignments", roomAssignmentRoutes);
+app.use("/transactions", tenantTransactionRoutes);
 
 app.get('/', (req, res) => {
     res.send('✅ e-kost backend is running');
