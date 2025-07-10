@@ -1,4 +1,3 @@
-// Keep this part:
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -7,6 +6,8 @@ import tenantRoutes from './routes/tenant';
 import roomRoutes from "./routes/room";
 import roomAssignmentRoutes from "./routes/roomAssignment";
 import tenantTransactionRoutes from "./routes/tenantTransaction";
+import summaryRoutes from "./routes/summary";
+import meRoutes from "./routes/me";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use('/tenants', tenantRoutes);
 app.use("/rooms", roomRoutes);
 app.use("/assignments", roomAssignmentRoutes);
 app.use("/transactions", tenantTransactionRoutes);
+app.use("/summary", summaryRoutes);
+app.use("/me", meRoutes);
 
 app.get('/', (req, res) => {
     res.send('✅ e-kost backend is running');
