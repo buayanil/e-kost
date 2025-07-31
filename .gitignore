@@ -10,7 +10,7 @@ frontend/.vite
 backend/prisma/dev.db
 backend/prisma/migrations/
 *.db
-/test-db-*.sqlite
+test-db-*.sqlite
 
 # Logs
 *.log
