@@ -56,6 +56,7 @@ npm run test
 What happens:
 
 - Tests are executed using vitest and supertest
+- Please note that the test clears your dev-db, use `npm run reset-db` to fill it again
 
 ## Project Notes
 - The server only starts when `NODE_ENV !== 'test'`. This allows testing to import `app` without auto-starting the listener.
