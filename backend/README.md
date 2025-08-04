@@ -55,17 +55,7 @@ npm run test
 
 What happens:
 
-- The database is reset and seeded first (reset-db)
-
 - Tests are executed using vitest and supertest
-
-Test features:
-
-- Logs in with seeded admin manager
-
-- Uses JWT to test protected routes
-
-- Cleans up relevant test data (e.g. tenants) after each test
 
 ## Project Notes
 - The server only starts when `NODE_ENV !== 'test'`. This allows testing to import `app` without auto-starting the listener.
