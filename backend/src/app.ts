@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/tenants', tenantRoutes);
 app.use("/rooms", roomRoutes);
 app.use("/assignments", roomAssignmentRoutes);

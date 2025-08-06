@@ -21,7 +21,7 @@ describe('Auth Routes', () => {
 
     it('registers a new manager', async () => {
         const res = await request(app)
-            .post('/api/auth/register')
+            .post('/auth/register')
             .send(testUser);
 
         expect(res.status).toBe(201);
@@ -37,7 +37,7 @@ describe('Auth Routes', () => {
         });
 
         const res = await request(app)
-            .post('/api/auth/register')
+            .post('/auth/register')
             .send(testUser);
 
         expect(res.status).toBe(409);
@@ -45,10 +45,10 @@ describe('Auth Routes', () => {
 
     it('logs in and returns a JWT token', async () => {
         // Register first
-        await request(app).post('/api/auth/register').send(testUser);
+        await request(app).post('/auth/register').send(testUser);
 
         const res = await request(app)
-            .post('/api/auth/login')
+            .post('/auth/login')
             .send(testUser);
 
         expect(res.status).toBe(200);
@@ -56,10 +56,10 @@ describe('Auth Routes', () => {
     });
 
     it('fails login with wrong password', async () => {
-        await request(app).post('/api/auth/register').send(testUser);
+        await request(app).post('/auth/register').send(testUser);
 
         const res = await request(app)
-            .post('/api/auth/login')
+            .post('/auth/login')
             .send({
                 username: testUser.username,
                 password: 'wrongpassword',
@@ -69,16 +69,16 @@ describe('Auth Routes', () => {
     });
 
     it('accesses /me with valid token', async () => {
-        await request(app).post('/api/auth/register').send(testUser);
+        await request(app).post('/auth/register').send(testUser);
 
         const loginRes = await request(app)
-            .post('/api/auth/login')
+            .post('/auth/login')
             .send(testUser);
 
         const token = loginRes.body.token;
 
         const meRes = await request(app)
-            .get('/api/auth/me')
+            .get('/auth/me')
             .set('Authorization', `Bearer ${token}`);
 
         expect(meRes.status).toBe(200);
@@ -86,7 +86,7 @@ describe('Auth Routes', () => {
     });
 
     it('blocks access to /me without token', async () => {
-        const res = await request(app).get('/api/auth/me');
+        const res = await request(app).get('/auth/me');
         expect(res.status).toBe(401);
     });
 });
