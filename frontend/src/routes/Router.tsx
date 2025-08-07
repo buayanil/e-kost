@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginView from "../views/LoginView.tsx";
+import LoginView from "../views/LoginView";
 import DashboardView from "../views/DashboardView";
-import RequireAuth from "./RequireAuth.tsx";
+import RoomsView from "../views/RoomsView";
+import RequireAuth from "./RequireAuth";
+import CreateRoomView from "../views/CreateRoomView.tsx";
 
 export default function AppRouter() {
     return (
@@ -9,16 +11,13 @@ export default function AppRouter() {
             <Routes>
                 <Route path="/login" element={<LoginView />} />
 
-                <Route
-                    path="/"
-                    element={
-                        <RequireAuth>
-                            <DashboardView />
-                        </RequireAuth>
-                    }
-                />
-
-                {/* Later: Add more protected routes here */}
+                {/* All protected routes grouped here */}
+                <Route element={<RequireAuth />}>
+                    <Route path="/" element={<DashboardView />} />
+                    <Route path="/rooms" element={<RoomsView />} />
+                    <Route path="/rooms/new" element={<CreateRoomView />} />
+                    {/* Add more protected routes here */}
+                </Route>
             </Routes>
         </BrowserRouter>
     );
