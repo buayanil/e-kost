@@ -61,6 +61,7 @@ describe("Integration test: /rooms (with real router + auth)", () => {
                 name: "Room A",
                 createdAt: expect.any(String),
                 currentAssignment: null,
+                notes: null,
             }),
         ]);
     });
@@ -76,6 +77,7 @@ describe("Integration test: /rooms (with real router + auth)", () => {
             name: "Room A",
             createdAt: expect.any(String),
             currentAssignment: null,
+            notes: null
         });
     });
 

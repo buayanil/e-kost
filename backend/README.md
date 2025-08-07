@@ -23,7 +23,7 @@ Alternatively, use a .env.example as a base template.
 ## Reset and Seed the Database
 To wipe the database and reseed with test data:
 ```bash
-npm run reset-db
+npm run reseed-db
 ```
 
 This will:
@@ -47,6 +47,7 @@ This will:
 npm run dev
 ```
 This starts the Express server on port 4000.
+The dev db is also reseeded.
 
 ## Run Automated Tests
 ```bash
@@ -55,6 +56,7 @@ npm run test
 
 What happens:
 
+- The dev db is reset but not reseeded
 - Tests are executed using vitest and supertest
 - Please note that the test clears your dev-db, use `npm run reset-db` to fill it again
 
