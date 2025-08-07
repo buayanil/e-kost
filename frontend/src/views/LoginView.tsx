@@ -4,13 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { loginRequest } from "../services/authService";
 
 const schema = z.object({
     username: z.string().min(1, "Username is required"),
     password: z.string().min(1, "Password is required"),
 });
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 type FormData = z.infer<typeof schema>;
 
@@ -25,19 +24,15 @@ export default function LoginView() {
 
     const onSubmit = async (data: FormData) => {
         try {
-            const res = await fetch(`${API_URL}/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            });
-
-            if (!res.ok) throw new Error("Login failed");
-
-            const { token } = await res.json();
-            login(token);           // Save token via AuthContext
+            const { token } = await loginRequest(data);
+            login(token);           // Save to AuthContext
             navigate("/");          // Redirect to dashboard
-        } catch (err) {
-            setError("Invalid credentials");
+        } catch (err: any) {
+            if (err.response && err.response.status === 401) {
+                setError("Invalid username or password");
+            } else {
+                setError("Something went wrong");
+            }
         }
     };
 
