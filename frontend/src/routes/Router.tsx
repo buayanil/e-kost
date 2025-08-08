@@ -4,6 +4,7 @@ import DashboardView from "../views/DashboardView";
 import RoomsView from "../views/RoomsView";
 import RequireAuth from "./RequireAuth";
 import CreateRoomView from "../views/CreateRoomView.tsx";
+import RoomDetailView from "../views/RoomDetailView.tsx";
 
 export default function AppRouter() {
     return (
@@ -16,6 +17,7 @@ export default function AppRouter() {
                     <Route path="/" element={<DashboardView />} />
                     <Route path="/rooms" element={<RoomsView />} />
                     <Route path="/rooms/new" element={<CreateRoomView />} />
+                    <Route path="/rooms/:id" element={<RoomDetailView />} />
                     {/* Add more protected routes here */}
                 </Route>
             </Routes>

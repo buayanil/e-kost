@@ -96,12 +96,12 @@ export const createRoom = async (req: Request, res: Response) => {
 
 export const updateRoom = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, notes } = req.body;
 
     try {
         const updated = await prisma.room.update({
             where: { id: Number(id) },
-            data: { name },
+            data: { name, notes },
         });
         res.json(updated);
     } catch (error: any) {

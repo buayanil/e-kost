@@ -123,10 +123,11 @@ describe("Integration test: /rooms (with real router + auth)", () => {
         const res = await request(app)
             .put(`/rooms/${roomId}`)
             .set("Authorization", `Bearer ${token}`)
-            .send({ name: "Updated Room A" });
+            .send({ name: "Updated Room A", notes: "Updated notes" });
 
         expect(res.status).toBe(200);
         expect(res.body.name).toBe("Updated Room A");
+        expect(res.body.notes).toBe("Updated notes");
     });
 
     it("PUT /rooms/:id with non-existing ID should return 404", async () => {
