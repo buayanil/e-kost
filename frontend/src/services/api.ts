@@ -4,11 +4,9 @@ export const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Add a request interceptor
+// Optional: if you prefer an interceptor instead of defaults
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token"); // get token from localStorage
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
+    const t = localStorage.getItem("token");
+    if (t) config.headers.Authorization = `Bearer ${t}`;
     return config;
 });
