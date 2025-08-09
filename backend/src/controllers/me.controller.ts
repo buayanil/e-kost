@@ -1,68 +1,61 @@
-// src/controllers/me.controller.ts
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import { prisma } from "../prismaClient";
 import bcrypt from "bcrypt";
-import { jwtVerify } from "jose";
 
-const getManagerFromToken = async (req: Request) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.split(" ")[1];
+const getManagerIdFromReq = (req: any): number | null => {
+    const raw =
+        req.managerId ??                  // e.g. middleware sets ID here
+        req.userId ??                     // or maybe here
+        req.user?.id ??                   // or attaches a user object
+        req.manager?.id;                  // or a manager object
 
-    if (!token) return null;
-
-    const decoded = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
-    return (decoded.payload as any).id as number;
+    if (raw == null) return null;
+    const n = typeof raw === "string" ? parseInt(raw, 10) : raw;
+    return Number.isFinite(n) ? n : null;
 };
 
-export const getMe = async (req: Request, res: Response) => {
-    try {
-        const managerId = await getManagerFromToken(req);
-
-        if (!managerId) {
-            res.status(401).json({ message: "Invalid or missing token" });
-            return;
-        }
-
-        const manager = await prisma.manager.findUnique({
-            where: { id: managerId },
-            select: { id: true, username: true, createdAt: true },
-        });
-
-        res.json(manager);
-    } catch (err) {
-        res.status(500).json({ message: "Error reading profile" });
+export const getMe: RequestHandler = async (req, res) => {
+    const id = getManagerIdFromReq(req);
+    if (!id) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
     }
+
+    const manager = await prisma.manager.findUnique({
+        where: { id },
+        select: { id: true, username: true, createdAt: true },
+    });
+
+    if (!manager) {
+        res.status(401).json({ message: "Account not found" });
+        return;
+    }
+
+    res.json(manager);
 };
 
-export const updateMe = async (req: Request, res: Response) => {
-    try {
-        const managerId = await getManagerFromToken(req);
-
-        if (!managerId) {
-            res.status(401).json({ message: "Invalid or missing token" });
-            return;
-        }
-
-        const { username, password } = req.body;
-
-        if (!username && !password) {
-            res.status(400).json({ message: "Nothing to update" });
-            return;
-        }
-
-        const updateData: { username?: string; passwordHash?: string } = {};
-
-        if (username) updateData.username = username;
-        if (password) updateData.passwordHash = await bcrypt.hash(password, 10);
-
-        const updated = await prisma.manager.update({
-            where: { id: managerId },
-            data: updateData,
-            select: { id: true, username: true, createdAt: true },
-        });
-
-        res.json(updated);
-    } catch (err) {
-        res.status(500).json({ message: "Error updating profile" });
+export const updateMe: RequestHandler = async (req, res) => {
+    const id = getManagerIdFromReq(req);
+    if (!id) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
     }
+
+    const { username, password } = req.body;
+    if (!username && !password) {
+        res.status(400).json({ message: "Nothing to update" });
+        return;
+    }
+
+    const data: { username?: string; passwordHash?: string } = {};
+    if (username) data.username = username;
+    if (password) data.passwordHash = await bcrypt.hash(password, 10);
+
+    const updated = await prisma.manager.update({
+        where: { id },
+        data,
+        select: { id: true, username: true, createdAt: true },
+    });
+
+    res.json(updated);
 };

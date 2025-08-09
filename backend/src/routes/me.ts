@@ -1,4 +1,3 @@
-// src/routes/me.routes.ts
 import { Router } from "express";
 import { getMe, updateMe } from "../controllers/me.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
