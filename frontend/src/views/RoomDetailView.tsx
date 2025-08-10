@@ -1,10 +1,10 @@
-// src/views/RoomDetailView.tsx
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import {
     fetchRoomById,
     updateRoom,
+    deleteRoom,
     type RoomDetail,
 } from "../services/roomService";
 
@@ -66,6 +66,26 @@ export default function RoomDetailView() {
         }
     };
 
+    const onDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this room?")) {
+            return;
+        }
+        try {
+            setError(null);
+            await deleteRoom(roomId);
+            navigate("/rooms");
+        } catch (err: any) {
+            if (err.response?.data?.message) {
+                // Use message sent by backend
+                setError(err.response.data.message);
+            } else {
+                // Fallback generic error
+                setError("Delete failed. Please try again.");
+            }
+            }
+    };
+
+
     if (loading) {
         return (
             <Layout>
@@ -107,6 +127,14 @@ export default function RoomDetailView() {
                         >
                             {editMode ? "Cancel" : "Edit"}
                         </button>
+                        {vacant && (
+                            <button
+                                onClick={onDelete}
+                                className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700"
+                            >
+                                Delete
+                            </button>
+                        )}
                     </div>
                 </div>
 

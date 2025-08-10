@@ -38,3 +38,8 @@ export const updateRoom = async (
     const { data } = await api.put(`/rooms/${id}`, payload);
     return data;
 };
+
+export const deleteRoom = async (id: number): Promise<RoomDetail> => {
+    const { data } = await api.delete(`/rooms/${id}`);
+    return data;
+};
