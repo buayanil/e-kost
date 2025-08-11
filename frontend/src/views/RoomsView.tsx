@@ -22,6 +22,14 @@ export default function RoomsView() {
         }
     };
 
+    const [statusFilter, setStatusFilter] = useState<"all" | "occupied" | "vacant">("all");
+
+    const filteredRooms = rooms.filter((room) => {
+        if (statusFilter === "all") return true;
+        const vacant = room.currentAssignment === null;
+        return statusFilter === "vacant" ? vacant : !vacant;
+    });
+
     useEffect(() => {
         loadRooms();
     }, []);
@@ -52,14 +60,42 @@ export default function RoomsView() {
                     </div>
                 )}
 
+                <div className="flex gap-2 m-2">
+                    <button
+                        onClick={() => setStatusFilter("all")}
+                        className={`px-3 py-1.5 rounded transition-colors 
+                      hover:bg-gray-100
+                        ${statusFilter === "all" ? "bg-gray-200 font-semibold" : ""}`}
+                    >
+                        All
+                    </button>
+                    <button
+                        onClick={() => setStatusFilter("occupied")}
+                        className={`px-3 py-1.5 rounded transition-colors 
+                      hover:bg-gray-100
+                        ${statusFilter === "occupied" ? "bg-gray-200 font-semibold" : ""}`}
+                    >
+                        Occupied
+                    </button>
+                    <button
+                        onClick={() => setStatusFilter("vacant")}
+                        className={`px-3 py-1.5 rounded transition-colors 
+                      hover:bg-gray-100
+                        ${statusFilter === "vacant" ? "bg-gray-200 font-semibold" : ""}`}
+                    >
+                        Vacant
+                    </button>
+                </div>
+
+
                 {/* Room List */}
                 {loading ? (
                     <p>Loading rooms...</p>
                 ) : rooms.length === 0 ? (
                     <p className="text-gray-500">No rooms found. Create one above.</p>
                 ) : (
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        {rooms.map((room) => (
+                    <div className="grid gap-4">
+                        {filteredRooms.map((room) => (
                             <RoomCard key={room.id} room={room} />
                         ))}
                     </div>
