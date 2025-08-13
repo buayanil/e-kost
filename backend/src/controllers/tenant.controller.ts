@@ -74,14 +74,14 @@ export const getTenantByName = async (req: Request, res: Response) => {
 
 // POST /tenants
 export const createTenant = async (req: Request, res: Response) => {
-    const { name } = req.body
+    const { name, notes } = req.body
     if (!name) {
         res.status(400).json({ message: 'Name is required.' })
         return
     }
 
     try {
-        const newTenant = await prisma.tenant.create({ data: { name } })
+        const newTenant = await prisma.tenant.create({ data: { name, notes } })
         res.status(201).json(newTenant)
     } catch (error: any) {
         if (error.code === 'P2002') {
@@ -95,24 +95,28 @@ export const createTenant = async (req: Request, res: Response) => {
 
 // PUT /tenants/:id
 export const updateTenant = async (req: Request, res: Response) => {
-    const tenantId = Number(req.params.id)
-    const { name } = req.body
+    const tenantId = Number(req.params.id);
+    const { name, notes } = req.body as { name?: string; notes?: string | null };
 
     try {
         const updatedTenant = await prisma.tenant.update({
             where: { id: tenantId },
-            data: { name },
-        })
-        res.json(updatedTenant)
+            data: { ...(name !== undefined && { name }), ...(notes !== undefined && { notes }) },
+            include: {
+                assignments: { include: { room: true }, orderBy: { startDate: "desc" } },
+                payments: { orderBy: { paymentDate: "desc" } }, // if you show payments too
+            },
+        });
+        res.json(updatedTenant);
     } catch (error: any) {
-        if (error.code === 'P2025') {
-            res.status(404).json({ message: 'Tenant not found.' })
+        if (error.code === "P2025") {
+            res.status(404).json({ message: "Tenant not found." });
         } else {
-            console.error(error)
-            res.status(500).json({ message: 'Failed to update tenant.' })
+            console.error(error);
+            res.status(500).json({ message: "Failed to update tenant." });
         }
     }
-}
+};
 
 // DELETE /tenants/:id
 export const deleteTenant = async (req: Request, res: Response) => {

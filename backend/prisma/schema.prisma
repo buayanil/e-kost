@@ -22,6 +22,7 @@ model Tenant {
   id             Int                 @id @default(autoincrement())
   name           String              @unique
   createdAt      DateTime            @default(now())
+  notes          String?
 
   assignments    RoomAssignment[]
   payments       TenantTransaction[]
@@ -34,7 +35,7 @@ model Room {
 
   assignments    RoomAssignment[]
   payments       TenantTransaction[]
-  notes         String?
+  notes          String?
 }
 
 model RoomAssignment {
