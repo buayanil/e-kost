@@ -28,6 +28,6 @@
     "start": "node dist/index.js",
     "reset-db": "del \"prisma\\dev.db\" && prisma db push",
     "reseed-db": "del \"prisma\\dev.db\" && prisma db push && ts-node prisma/seed.ts",
-    "test": "npm run reseed-db && vitest run"
+    "test": "npm run reset-db && vitest run"
   }
 }
