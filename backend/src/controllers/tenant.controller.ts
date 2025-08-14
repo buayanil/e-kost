@@ -31,6 +31,12 @@ export const getTenantById = async (req: Request, res: Response) => {
                 assignments: {
                     include: { room: true },
                 },
+                payments: {
+                    include: {
+                        room: true,
+                        manager: true,
+                    },
+                },
             },
         })
 
@@ -48,7 +54,7 @@ export const getTenantById = async (req: Request, res: Response) => {
 
 // GET /tenants/by-name/:name
 export const getTenantByName = async (req: Request, res: Response) => {
-    const name = req.params.name
+    const name = req.params.name;
 
     try {
         const tenant = await prisma.tenant.findUnique({
@@ -56,6 +62,12 @@ export const getTenantByName = async (req: Request, res: Response) => {
             include: {
                 assignments: {
                     include: { room: true },
+                },
+                payments: {
+                    include: {
+                        room: true,
+                        manager: true,
+                    },
                 },
             },
         })
@@ -70,7 +82,7 @@ export const getTenantByName = async (req: Request, res: Response) => {
         console.error(error)
         res.status(500).json({ message: 'Failed to fetch tenant.' })
     }
-}
+};
 
 // POST /tenants
 export const createTenant = async (req: Request, res: Response) => {
