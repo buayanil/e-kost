@@ -1,20 +1,5 @@
 import { api } from "./api";
-
-export type Room = {
-    id: number;
-    name: string;
-    createdAt: string;
-    currentAssignment: {
-        tenant: { id: number; name: string };
-        startDate: string;
-        endDate: string | null;
-    } | null;
-};
-
-// Optional: detail type (includes fields editable on the detail page)
-export type RoomDetail = Room & {
-    notes?: string | null;
-};
+import type {Room, RoomDetail} from "../types/room.ts";
 
 export const fetchRooms = async (): Promise<Room[]> => {
     const { data } = await api.get("/rooms");
