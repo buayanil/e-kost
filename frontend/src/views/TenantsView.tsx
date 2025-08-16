@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
-import { fetchTenants, type Tenant } from "../services/tenantService";
+import { fetchTenants } from "../services/tenantService";
+import type {Tenant} from "../types/tenant.ts";
 
 export default function TenantsView() {
     const [tenants, setTenants] = useState<Tenant[]>([]);
@@ -65,13 +66,18 @@ export default function TenantsView() {
                     <li key={t.id} className="rounded-xl border p-4 hover:bg-gray-50">
                         <Link to={`/tenants/${t.id}`} className="block focus:outline-none">
                             <p className="text-lg font-medium">{t.name}</p>
-                            {t.currentRoom ? (
-                                <p className="text-sm text-gray-600">
-                                    Room: {t.currentRoom.name}
-                                </p>
-                            ) : (
-                                <p className="text-sm text-gray-600">Unassigned</p>
-                            )}
+
+                            {(() => {
+                                const current = t.assignments?.find(a => !a.endDate) ?? t.assignments?.[0];
+
+                                return current ? (
+                                    <p className="text-sm text-gray-600">
+                                        Room: {current.room?.name ?? "Unknown"}
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-gray-600">Unassigned</p>
+                                );
+                            })()}
                         </Link>
                     </li>
                 ))}

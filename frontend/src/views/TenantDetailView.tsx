@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchTenantById } from "../services/tenantService";
 import type {Tenant} from "../types/tenant";
 import Layout from "../components/Layout.tsx";
+import TenantCard from "../components/TenantCard.tsx";
 
 export default function TenantDetailView() {
     const { id } = useParams<{ id: string }>();
@@ -29,10 +30,12 @@ export default function TenantDetailView() {
     return (
         <Layout>
             <div className="space-y-6">
-                <div className="rounded-xl border p-4">
-                    <h2 className="text-xl font-semibold">{tenant.name}</h2>
-                    {tenant.notes && <p className="text-gray-700">{tenant.notes}</p>}
-                </div>
+                <TenantCard
+                    tenant={tenant}
+                    onUpdated={(updated) =>
+                        setTenant((prev) => (prev ? { ...prev, ...updated } : updated))
+                    }
+                />
 
                 {/* Assignments */}
                 <div className="rounded-xl border p-4">
@@ -82,13 +85,13 @@ export default function TenantDetailView() {
                                         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
                                             {p.room?.name && (
                                                 <span className="rounded-full border px-2 py-0.5">
-                            Room: {p.room.name}
-                          </span>
+                                                    Room: {p.room.name}
+                                                </span>
                                             )}
                                             {p.manager?.username && (
                                                 <span className="rounded-full border px-2 py-0.5">
-                            Manager: {p.manager.username}
-                          </span>
+                                                    Manager: {p.manager.username}
+                                                </span>
                                             )}
                                         </div>
 
